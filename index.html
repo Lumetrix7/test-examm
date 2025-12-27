@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Экзамен по Python ООП</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="light-theme">
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1><i class="fas fa-graduation-cap"></i> Экзамен по Python ООП</h1>
+                <div class="theme-toggle">
+                    <button id="themeToggle">
+                        <i class="fas fa-moon"></i> Тёмная тема
+                    </button>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress" id="globalProgress" style="width: 0%"></div>
+            </div>
+        </header>
+
+        <main>
+            <div class="welcome-section">
+                <div class="welcome-card">
+                    <h2><i class="fas fa-book-open"></i> Подготовка к экзамену</h2>
+                    <p>Темы для экзамена по Python Объектно-Ориентированному Программированию (ООП). Всего 156 вопросов.</p>
+                    
+                    <div class="stats">
+                        <div class="stat-item">
+                            <span class="stat-number">156</span>
+                            <span class="stat-label">вопросов</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">5</span>
+                            <span class="stat-label">разделов</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">0%</span>
+                            <span class="stat-label">пройдено</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-grid">
+                    <a href="pages/topics.html" class="menu-card">
+                        <div class="menu-icon">
+                            <i class="fas fa-list-ol"></i>
+                        </div>
+                        <h3>Темы экзамена</h3>
+                        <p>Просмотр всех разделов и тем</p>
+                    </a>
+
+                    <a href="pages/exam.html?mode=all" class="menu-card">
+                        <div class="menu-icon">
+                            <i class="fas fa-clipboard-check"></i>
+                        </div>
+                        <h3>Полный экзамен</h3>
+                        <p>Все 156 вопросов подряд</p>
+                    </a>
+
+                    <a href="pages/exam.html?mode=section1" class="menu-card">
+                        <div class="menu-icon">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <h3>Раздел I: Основы ООП</h3>
+                        <p>10 вопросов</p>
+                    </a>
+
+                    <a href="pages/exam.html?mode=section2" class="menu-card">
+                        <div class="menu-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Раздел II: Инкапсуляция</h3>
+                        <p>45 вопросов</p>
+                    </a>
+
+                    <a href="pages/exam.html?mode=section3" class="menu-card">
+                        <div class="menu-icon">
+                            <i class="fas fa-sitemap"></i>
+                        </div>
+                        <h3>Раздел III: Наследование</h3>
+                        <p>20 вопросов</p>
+                    </a>
+
+                    <a href="pages/exam.html?mode=section4" class="menu-card">
+                        <div class="menu-icon">
+                            <i class="fas fa-magic"></i>
+                        </div>
+                        <h3>Раздел IV: Dunder методы</h3>
+                        <p>30 вопросов</p>
+                    </a>
+
+                    <a href="pages/exam.html?mode=section5" class="menu-card">
+                        <div class="menu-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h3>Раздел V: Обработка ошибок</h3>
+                        <p>51 вопрос</p>
+                    </a>
+
+                    <a href="#" class="menu-card" id="practiceMode">
+                        <div class="menu-icon">
+                            <i class="fas fa-random"></i>
+                        </div>
+                        <h3>Случайные вопросы</h3>
+                        <p>20 случайных вопросов</p>
+                    </a>
+
+                    <a href="#" class="menu-card" id="resultsLink">
+                        <div class="menu-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <h3>Мои результаты</h3>
+                        <p>История ответов</p>
+                    </a>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Экзамен по Python ООП © 2024</p>
+            <p class="footer-info">Всего вопросов: 156 | Верных ответов: <span id="correctCount">0</span></p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="themes.js"></script>
+</body>
+</html>

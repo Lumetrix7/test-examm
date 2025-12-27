@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Результаты - Python ООП</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="light-theme">
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1><i class="fas fa-chart-bar"></i> Мои результаты</h1>
+                <div class="theme-toggle">
+                    <button id="themeToggle">
+                        <i class="fas fa-moon"></i> Тёмная тема
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="results-summary">
+                <h2>Общая статистика</h2>
+                <div class="score-circle">
+                    <div class="score-text" id="overallScore">0%</div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalQuestionsStat">0</div>
+                        <div class="stat-label">Всего вопросов</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="answeredQuestions">0</div>
+                        <div class="stat-label">Отвечено</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="correctAnswers">0</div>
+                        <div class="stat-label">Правильно</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="incorrectAnswers">0</div>
+                        <div class="stat-label">Неправильно</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-details">
+                <h3>Детальные результаты по разделам</h3>
+                <div id="sectionResults">
+                    <!-- Результаты по разделам будут добавлены динамически -->
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="nav-button" onclick="clearResults()" style="background-color: var(--incorrect-color);">
+                    <i class="fas fa-trash"></i> Очистить результаты
+                </button>
+                <button class="nav-button" onclick="continueExam()">
+                    <i class="fas fa-redo"></i> Продолжить экзамен
+                </button>
+            </div>
+        </main>
+
+        <footer>
+            <button class="nav-button" onclick="window.location.href='../index.html'">
+                <i class="fas fa-home"></i> Главное меню
+            </button>
+            <p class="footer-info">Последнее обновление: <span id="lastUpdate">-</span></p>
+        </footer>
+    </div>
+
+    <script src="../data/questions.js"></script>
+    <script src="../script.js"></script>
+    <script src="../themes.js"></script>
+    <script>
+        // Загрузка и отображение результатов
+        document.addEventListener('DOMContentLoaded', function() {
+            loadResults();
+        });
+
+        // Загрузка результатов
+        function loadResults() {
+            const savedProgress = JSON.parse(localStorage.getItem('examProgress') || '{"total": 156, "completed": 0, "correct": 0}');
+            const savedAnswers = JSON.parse(localStorage.getItem('examAnswers') || '{}');
+            
+            // Обновляем общую статистику
+            updateOverallStats(savedProgress, savedAnswers);
+            
+            // Обновляем результаты по разделам
+            updateSectionStats(savedAnswers);
+            
+            // Обновляем время последнего обновления
+            updateLastUpdate();
+        }
+
+        // Обновление общей статистики
+        function updateOverallStats(progress, answers) {
+            const total = progress.total || 156;
+            const completed = progress.completed || 0;
+            const correct = progress.correct || 0;
+            const incorrect = completed - correct;
+            
+            // Вычисляем процент
+            const percentage = completed > 0 ? Math.round((correct / completed) * 100) : 0;
+            
+            // Обновляем элементы
+            document.getElementById('overallScore').textContent = `${percentage}%`;
+            document.getElementById('totalQuestionsStat').textContent = total;
+            document.getElementById('answeredQuestions').textContent = completed;
+            document.getElementById('correctAnswers').textContent = correct;
+            document.getElementById('incorrectAnswers').textContent = incorrect;
+            
+            // Обновляем прогресс-круг
+            updateScoreCircle(percentage);
+        }
+
+        // Обновление круга с результатами
+        function updateScoreCircle(percentage) {
+            const circle = document.querySelector('.score-circle');
+            if (circle) {
+                circle.style.background = `conic-gradient(
+                    var(--primary-color) 0% ${percentage}%, 
+                    var(--border-color) ${percentage}% 100%
+                )`;
+            }
+        }
+
+        // Обновление статистики по разделам
+        function updateSectionStats(answers) {
+            const sectionResults = document.getElementById('sectionResults');
+            sectionResults.innerHTML = '';
+            
+            const sections = examQuestions.sections;
+            
+            for (const sectionId in sections) {
+                const section = sections[sectionId];
+                const questionIds = section.questions;
+                
+                let correct = 0;
+                let total = 0;
+                
+                // Подсчитываем результаты для этого раздела
+                questionIds.forEach(questionId => {
+                    const answer = answers[questionId];
+                    if (answer) {
+                        total++;
+                        if (answer.correct) {
+                            correct++;
+                        }
+                    }
+                });
+                
+                // Создаем карточку раздела
+                const sectionCard = document.createElement('div');
+                sectionCard.className = 'section-card';
+                sectionCard.innerHTML = `
+                    <h4>${section.name}</h4>
+                    <div class="section-stats">
+                        <span>Вопросов: ${questionIds.length}</span>
+                        <span>Отвечено: ${total}</span>
+                        <span>Правильно: ${correct}</span>
+                        <span>Процент: ${total > 0 ? Math.round((correct / total) * 100) : 0}%</span>
+                    </div>
+                    <a href="exam.html?mode=${sectionId}" class="nav-button small">
+                        <i class="fas fa-redo"></i> Повторить раздел
+                    </a>
+                `;
+                
+                sectionResults.appendChild(sectionCard);
+            }
+        }
+
+        // Обновление времени последнего обновления
+        function updateLastUpdate() {
+            const savedProgress = JSON.parse(localStorage.getItem('examProgress') || '{}');
+            if (savedProgress.lastUpdate) {
+                const date = new Date(savedProgress.lastUpdate);
+                document.getElementById('lastUpdate').textContent = date.toLocaleString('ru-RU');
+            }
+        }
+
+        // Очистка результатов
+        function clearResults() {
+            if (confirm('Вы уверены, что хотите очистить все результаты?')) {
+                localStorage.removeItem('examAnswers');
+                localStorage.removeItem('examProgress');
+                showNotification('Результаты очищены', 'success');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            }
+        }
+
+        // Продолжение экзамена с первого неотвеченного вопроса
+        function continueExam() {
+            const savedProgress = JSON.parse(localStorage.getItem('examProgress') || '{"completed": 0}');
+            if (savedProgress.completed < 156) {
+                window.location.href = 'exam.html?mode=all';
+            } else {
+                showNotification('Вы уже ответили на все вопросы!', 'error');
+            }
+        }
+
+        // Стили для карточек разделов
+        const style = document.createElement('style');
+        style.textContent = `
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 1rem;
+                margin-top: 2rem;
+            }
+            
+            .stat-card {
+                background-color: var(--background-color);
+                padding: 1rem;
+                border-radius: 8px;
+                text-align: center;
+            }
+            
+            .results-details {
+                background-color: var(--card-background);
+                padding: 2rem;
+                border-radius: 10px;
+                box-shadow: 0 4px 15px var(--shadow-color);
+                margin-top: 2rem;
+            }
+            
+            .section-card {
+                background-color: var(--background-color);
+                padding: 1.5rem;
+                border-radius: 8px;
+                margin-bottom: 1rem;
+                border-left: 4px solid var(--primary-color);
+            }
+            
+            .section-stats {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 1rem;
+                margin: 1rem 0;
+                font-size: 0.9rem;
+            }
+            
+            .section-stats span {
+                background-color: var(--card-background);
+                padding: 0.25rem 0.5rem;
+                border-radius: 4px;
+            }
+            
+            .nav-button.small {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .action-buttons {
+                display: flex;
+                gap: 1rem;
+                margin-top: 2rem;
+                justify-content: center;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

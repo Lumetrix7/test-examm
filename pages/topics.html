@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Темы экзамена - Python ООП</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="light-theme">
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1><i class="fas fa-list-ol"></i> Темы экзамена</h1>
+                <div class="theme-toggle">
+                    <button id="themeToggle">
+                        <i class="fas fa-moon"></i> Тёмная тема
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="topics-list">
+                <!-- Раздел I -->
+                <div class="topic-section">
+                    <h3><i class="fas fa-layer-group"></i> Раздел I. Основы ООП, Классы и Объекты</h3>
+                    <ul class="topic-list">
+                        <li class="topic-item"><i class="fas fa-circle"></i> Введение в объектно-ориентированное программирование (ООП) в Python</li>
+                        <li class="topic-item"><i class="fas fa-circle"></i> Определение классов и создание новых объектов/экземпляров</li>
+                        <li class="topic-item"><i class="fas fa-circle"></i> Атрибуты: переменные экземпляра и класса</li>
+                        <li class="topic-item"><i class="fas fa-circle"></i> Методы: методы экземпляра и статические методы</li>
+                        <li class="topic-item"><i class="fas fa-circle"></i> Создание и инициализация: __init__ и __new__</li>
+                    </ul>
+                    <a href="exam.html?mode=section1" class="nav-button" style="margin-top: 1rem;">
+                        <i class="fas fa-play-circle"></i> Начать раздел (10 вопросов)
+                    </a>
+                </div>
+
+                <!-- Раздел II -->
+                <div class="topic-section">
+                    <h3><i class="fas fa-shield-alt"></i> Раздел II. Инкапсуляция и Свойства (Properties)</h3>
+                    <ul class="topic-list">
+                        <li class="topic-item"><i class="fas fa-circle"></i> Инкапсуляция</li>
+                        <li class="topic-item"><i class="fas fa-circle"></i> Приватные атрибуты и методы</li>
+                        <li class="topic-item"><i class="fas fa-circle"></i> Искажение имени (Name Mangling)</li>
+                        <li class="topic-item"><i class="fas fa-circle"></i> Управление доступом (Getters и Setters)</li>
+                        <li class="topic-item"><i class="fas fa-circle"></i> Свойства (Properties) и декоратор @property</li>
+                        <li class="topic-item"><i class="fas fa-circle"></i> Дескрипторы и __slots__</li>
+                    </ul>
+                    <a href="exam.html?mode=section2" class="nav-button" style="margin-top: 1rem;">
+                        <i class="fas fa-play-circle"></i> Начать раздел (45 вопросов)
+                    </a>
+                </div>
+
+                <!-- Раздел III -->
+                <div class="topic-section">
+                    <h3><i class="fas fa-sitemap"></i> Раздел III. Наследование, Полиморфизм и Структура</h3>
+                    <ul class="topic-list">
+                        <li class="topic-item"><i class="fas fa-circle"></i> Наследование (Single и Multiple Inheritance)</li>
+                        <li class="topic-item"><i class="fas fa-circle"></i> Использование super()</li>
+                        <li class="topic-item"><i class="fas fa-circle"></i> Полиморфизм</li>
+                        <li class="topic-item"><i class="fas fa-circle"></i> Абстрактные классы</li>
+                        <li class="topic-item"><i class="fas fa-circle"></i> Порядок разрешения методов (MRO)</li>
+                        <li class="topic-item"><i class="fas fa-circle"></i> Переопределение методов</li>
+                    </ul>
+                    <a href="exam.html?mode=section3" class="nav-button" style="margin-top: 1rem;">
+                        <i class="fas fa-play-circle"></i> Начать раздел (20 вопросов)
+                    </a>
+                </div>
+
+                <!-- Раздел IV -->
+                <div class="topic-section">
+                    <h3><i class="fas fa-magic"></i> Раздел IV. Специальные методы (Dunder methods) и Автоматизация</h3>
+                    <ul class="topic-list">
+                        <li class="topic-item"><i class="fas fa-circle"></i> __str__ и __repr__</li>
+                        <li class="topic-item"><i class="fas fa-circle"></i> __eq__ и __hash__</li>
+                        <li class="topic-item"><i class="fas fa-circle"></i> Контекстные менеджеры (__enter__ и __exit__)</li>
+                        <li class="topic-item"><i class="fas fa-circle"></i> Автоматизация с dataclass</li>
+                        <li class="topic-item"><i class="fas fa-circle"></i> Перечисления (Enumeration)</li>
+                        <li class="topic-item"><i class="fas fa-circle"></i> Метаклассы</li>
+                    </ul>
+                    <a href="exam.html?mode=section4" class="nav-button" style="margin-top: 1rem;">
+                        <i class="fas fa-play-circle"></i> Начать раздел (30 вопросов)
+                    </a>
+                </div>
+
+                <!-- Раздел V -->
+                <div class="topic-section">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Раздел V. Обработка Ошибок и Принципы Проектирования</h3>
+                    <ul class="topic-list">
+                        <li class="topic-item"><i class="fas fa-circle"></i> Обработка исключений</li>
+                        <li class="topic-item"><i class="fas fa-circle"></i> Пользовательские классы исключений</li>
+                        <li class="topic-item"><i class="fas fa-circle"></i> Принципы SOLID в ООП</li>
+                        <li class="topic-item"><i class="fas fa-circle"></i> SRP, OCP, LSP, ISP, DIP</li>
+                        <li class="topic-item"><i class="fas fa-circle"></i> Duck Typing</li>
+                    </ul>
+                    <a href="exam.html?mode=section5" class="nav-button" style="margin-top: 1rem;">
+                        <i class="fas fa-play-circle"></i> Начать раздел (51 вопрос)
+                    </a>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <button class="nav-button" onclick="window.location.href='../index.html'">
+                <i class="fas fa-home"></i> Главное меню
+            </button>
+            <p class="footer-info">Всего тем: 5 разделов | 156 вопросов</p>
+        </footer>
+    </div>
+
+    <script src="../script.js"></script>
+    <script src="../themes.js"></script>
+</body>
+</html>

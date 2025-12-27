@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Экзамен - Python ООП</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Дополнительные стили для адаптивных кнопок */
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .nav-button {
+            flex: 1;
+            padding: 10px 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 44px;
+        }
+
+        .nav-button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .nav-button:active {
+            transform: scale(0.98);
+        }
+
+        .nav-button:disabled {
+            background-color: var(--border-color);
+            cursor: not-allowed;
+            opacity: 0.6;
+            transform: none;
+        }
+
+        .button-text {
+            white-space: nowrap;
+        }
+
+        /* Адаптация для мобильных устройств */
+        @media (max-width: 768px) {
+            .navigation-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .nav-button {
+                width: 100%;
+                padding: 12px 16px;
+                font-size: 1rem;
+            }
+
+            .button-text.long {
+                display: none;
+            }
+
+            .button-text.short {
+                display: inline;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .button-text.long {
+                display: inline;
+            }
+
+            .button-text.short {
+                display: none;
+            }
+        }
+
+        /* Для очень маленьких экранов */
+        @media (max-width: 480px) {
+            .nav-button {
+                padding: 14px 16px;
+                font-size: 0.95rem;
+            }
+
+            .nav-button i {
+                font-size: 0.9em;
+            }
+
+            .button-text {
+                font-size: 0.9em;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .nav-button {
+                padding: 12px;
+                justify-content: center;
+            }
+
+            .button-text {
+                display: none;
+            }
+
+            .nav-button i {
+                margin: 0;
+                font-size: 1.1em;
+            }
+        }
+
+        /* Стили для футера на мобильных */
+        @media (max-width: 768px) {
+            footer {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            footer .nav-button {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+
+            .footer-info {
+                order: -1;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="light-theme">
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1><i class="fas fa-clipboard-check"></i> Экзамен по Python ООП</h1>
+                <div class="theme-toggle">
+                    <button id="themeToggle">
+                        <i class="fas fa-moon"></i> Тёмная тема
+                    </button>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress" id="examProgress" style="width: 0%"></div>
+            </div>
+        </header>
+
+        <main>
+            <div class="exam-container">
+                <div class="question-counter">
+                    Вопрос <span id="currentQuestion">1</span> из <span id="totalQuestions">156</span>
+                </div>
+
+                <div class="question-text" id="questionText">
+                    Загрузка вопроса...
+                </div>
+
+                <div class="options-grid" id="optionsContainer">
+                    <!-- Варианты ответов будут добавлены динамически -->
+                </div>
+
+                <div class="answer-feedback" id="feedback" style="display: none;">
+                    <!-- Обратная связь будет показана здесь -->
+                </div>
+
+                <div class="navigation-buttons">
+                    <button class="nav-button" id="prevButton" onclick="prevQuestion()" disabled>
+                        <i class="fas fa-arrow-left"></i>
+                        <span class="button-text long">Предыдущий</span>
+                        <span class="button-text short">Назад</span>
+                    </button>
+
+                    <button class="nav-button" id="submitButton" onclick="submitAnswer()">
+                        <i class="fas fa-check-circle"></i>
+                        <span class="button-text long">Проверить ответ</span>
+                        <span class="button-text short">Проверить</span>
+                    </button>
+
+                    <button class="nav-button" id="nextButton" onclick="nextQuestion()">
+                        <span class="button-text long">Следующий</span>
+                        <span class="button-text short">Далее</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <div class="exam-info">
+                    <p><i class="fas fa-info-circle"></i> Выберите один или несколько правильных ответов</p>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <button class="nav-button" onclick="window.location.href='../index.html'">
+                <i class="fas fa-home"></i> Главное меню
+            </button>
+            <p class="footer-info">Режим: <span id="examMode">Загрузка...</span></p>
+        </footer>
+    </div>
+
+    <script src="../data/questions.js"></script>
+    <script src="../script.js"></script>
+    <script src="../themes.js"></script>
+    <script>
+        // Логика экзамена
+        let currentQuestionIndex = 0;
+        let currentQuestions = [];
+        let userAnswers = {};
+        let examMode = 'all';
+
+        // Инициализация экзамена
+        document.addEventListener('DOMContentLoaded', function () {
+            examMode = getExamMode();
+            loadQuestions();
+            loadQuestion();
+            updateExamInfo();
+            adaptButtonsForMobile();
+            window.addEventListener('resize', adaptButtonsForMobile);
+        });
+
+        // Адаптация кнопок для мобильных
+        function adaptButtonsForMobile() {
+            if (window.innerWidth <= 768) {
+                // На мобильных добавляем класс для адаптации
+                document.querySelector('.navigation-buttons').classList.add('mobile-layout');
+            } else {
+                document.querySelector('.navigation-buttons').classList.remove('mobile-layout');
+            }
+        }
+
+        // Загрузка вопросов в зависимости от режима
+        function loadQuestions() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const count = urlParams.get('count');
+
+            switch (examMode) {
+                case 'all':
+                    currentQuestions = examQuestions.getAllQuestions();
+                    break;
+                case 'section1':
+                    currentQuestions = examQuestions.getQuestionsBySection('section1');
+                    break;
+                case 'section2':
+                    currentQuestions = examQuestions.getQuestionsBySection('section2');
+                    break;
+                case 'section3':
+                    currentQuestions = examQuestions.getQuestionsBySection('section3');
+                    break;
+                case 'section4':
+                    currentQuestions = examQuestions.getQuestionsBySection('section4');
+                    break;
+                case 'section5':
+                    currentQuestions = examQuestions.getQuestionsBySection('section5');
+                    break;
+                case 'random':
+                    currentQuestions = examQuestions.getRandomQuestions(count || 20);
+                    break;
+                default:
+                    currentQuestions = examQuestions.getAllQuestions();
+            }
+
+            document.getElementById('totalQuestions').textContent = currentQuestions.length;
+            updateProgressBar();
+        }
+
+        // Загрузка текущего вопроса
+        function loadQuestion() {
+            if (currentQuestions.length === 0) return;
+
+            const question = currentQuestions[currentQuestionIndex];
+            document.getElementById('questionText').textContent = question.text;
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+
+            // Создаем варианты ответов
+            question.options.forEach((option, index) => {
+                const optionId = `option${index}`;
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option-label';
+                optionDiv.id = `optionLabel${index}`;
+
+                const input = document.createElement('input');
+                input.type = question.correctAnswers.length > 1 ? 'checkbox' : 'radio';
+                input.className = 'option-input';
+                input.name = 'answer';
+                input.value = option.charAt(0);
+                input.id = optionId;
+
+                // Проверяем, был ли уже выбран этот вариант
+                if (userAnswers[currentQuestionIndex]?.includes(option.charAt(0))) {
+                    input.checked = true;
+                    optionDiv.classList.add('selected');
+                }
+
+                const label = document.createElement('label');
+                label.htmlFor = optionId;
+                label.textContent = option;
+
+                optionDiv.appendChild(input);
+                optionDiv.appendChild(label);
+
+                // Обработчик клика
+                optionDiv.addEventListener('click', function () {
+                    const input = this.querySelector('input');
+                    input.checked = !input.checked;
+
+                    if (input.checked) {
+                        this.classList.add('selected');
+                    } else {
+                        this.classList.remove('selected');
+                    }
+
+                    // Для радиокнопок снимаем выбор с других вариантов
+                    if (input.type === 'radio' && input.checked) {
+                        document.querySelectorAll('.option-label').forEach(opt => {
+                            if (opt !== this) {
+                                opt.classList.remove('selected');
+                                opt.querySelector('input').checked = false;
+                            }
+                        });
+                    }
+                });
+
+                optionsContainer.appendChild(optionDiv);
+            });
+
+            // Обновляем состояние кнопок
+            document.getElementById('prevButton').disabled = currentQuestionIndex === 0;
+            document.getElementById('nextButton').disabled = currentQuestionIndex === currentQuestions.length - 1;
+
+            // Скрываем обратную связь
+            document.getElementById('feedback').style.display = 'none';
+        }
+
+        // Получение выбранных ответов
+        function getSelectedAnswers() {
+            const selected = [];
+            document.querySelectorAll('.option-input:checked').forEach(input => {
+                selected.push(input.value);
+            });
+            return selected;
+        }
+
+        // Проверка ответа
+        function submitAnswer() {
+            const selectedAnswers = getSelectedAnswers();
+            const question = currentQuestions[currentQuestionIndex];
+            const isCorrect = examQuestions.checkAnswer(question.id, selectedAnswers);
+
+            // Сохраняем ответ
+            userAnswers[currentQuestionIndex] = selectedAnswers;
+            saveAnswer(question.id, selectedAnswers, isCorrect);
+
+            // Показываем обратную связь
+            showFeedback(isCorrect, question.correctAnswers);
+
+            // Подсвечиваем правильные/неправильные ответы
+            highlightAnswers(question.correctAnswers, selectedAnswers);
+
+            // Показываем уведомление
+            showNotification(isCorrect ? 'Правильно! ✓' : 'Неправильно ✗', isCorrect ? 'success' : 'error');
+
+            // На мобильных автоматически скрываем клавиатуру
+            if (window.innerWidth <= 768) {
+                document.activeElement.blur();
+            }
+        }
+
+        // Подсветка ответов
+        function highlightAnswers(correctAnswers, selectedAnswers) {
+            document.querySelectorAll('.option-label').forEach(label => {
+                const input = label.querySelector('input');
+                const optionLetter = input.value;
+
+                if (correctAnswers.includes(optionLetter)) {
+                    label.classList.add('correct');
+                } else if (selectedAnswers.includes(optionLetter)) {
+                    label.classList.add('incorrect');
+                }
+            });
+        }
+
+        // Показ обратной связи
+        function showFeedback(isCorrect, correctAnswers) {
+            const feedbackDiv = document.getElementById('feedback');
+            feedbackDiv.style.display = 'block';
+            feedbackDiv.className = 'answer-feedback';
+
+            if (isCorrect) {
+                feedbackDiv.innerHTML = `
+                    <div style="color: var(--correct-color); font-weight: bold;">
+                        <i class="fas fa-check-circle"></i> Правильный ответ!
+                    </div>
+                    <p>Правильные варианты: ${correctAnswers.join(', ')}</p>
+                `;
+                feedbackDiv.style.backgroundColor = 'rgba(40, 167, 69, 0.1)';
+                feedbackDiv.style.padding = '1rem';
+                feedbackDiv.style.borderRadius = '5px';
+                feedbackDiv.style.borderLeft = '4px solid var(--correct-color)';
+            } else {
+                feedbackDiv.innerHTML = `
+                    <div style="color: var(--incorrect-color); font-weight: bold;">
+                        <i class="fas fa-times-circle"></i> Неправильный ответ
+                    </div>
+                    <p>Правильные варианты: ${correctAnswers.join(', ')}</p>
+                    <p>Вы выбрали: ${getSelectedAnswers().join(', ') || 'ничего'}</p>
+                `;
+                feedbackDiv.style.backgroundColor = 'rgba(220, 53, 69, 0.1)';
+                feedbackDiv.style.padding = '1rem';
+                feedbackDiv.style.borderRadius = '5px';
+                feedbackDiv.style.borderLeft = '4px solid var(--incorrect-color)';
+            }
+
+            // На мобильных прокручиваем к обратной связи
+            if (window.innerWidth <= 768) {
+                setTimeout(() => {
+                    feedbackDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 100);
+            }
+        }
+
+        // Следующий вопрос
+        function nextQuestion() {
+            if (currentQuestionIndex < currentQuestions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+                updateProgressBar();
+
+                // На мобильных прокручиваем к началу
+                if (window.innerWidth <= 768) {
+                    setTimeout(() => {
+                        document.querySelector('.question-counter').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 50);
+                }
+            }
+        }
+
+        // Предыдущий вопрос
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+                updateProgressBar();
+
+                // На мобильных прокручиваем к началу
+                if (window.innerWidth <= 768) {
+                    setTimeout(() => {
+                        document.querySelector('.question-counter').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 50);
+                }
+            }
+        }
+
+        // Обновление прогресс-бара
+        function updateProgressBar() {
+            const progress = ((currentQuestionIndex + 1) / currentQuestions.length) * 100;
+            document.getElementById('examProgress').style.width = `${progress}%`;
+        }
+
+        // Обновление информации об экзамене
+        function updateExamInfo() {
+            const modeNames = {
+                'all': 'Полный экзамен',
+                'section1': 'Раздел I: Основы ООП',
+                'section2': 'Раздел II: Инкапсуляция',
+                'section3': 'Раздел III: Наследование',
+                'section4': 'Раздел IV: Dunder методы',
+                'section5': 'Раздел V: Обработка ошибок',
+                'random': 'Случайные вопросы'
+            };
+
+            document.getElementById('examMode').textContent = modeNames[examMode] || examMode;
+        }
+    </script>
+</body>
+
+</html>
